@@ -1,3 +1,9 @@
+vyatta-vrrp (0.5) unstable; urgency=low
+
+  * Add version dependencies to avoid conflicts
+
+ -- John Southworth <john.southworth@vyatta.com>  Wed, 16 May 2012 10:19:15 -0700
+
 vyatta-vrrp (0.4) unstable; urgency=low
 
   * Create share_perl5dir destination directory in the debian build

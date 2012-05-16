@@ -1,0 +1,16 @@
+Source: vyatta-vrrp
+Section: contrib/net
+Priority: extra
+Maintainer: Vyatta Package Maintainers <maintainers@vyatta.com>
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.2
+
+Package: vyatta-vrrp
+Architecture: all
+Depends: perl,
+ vyatta-cfg,
+ vyatta-op,
+ vyatta-bash | bash (>= 3.1),
+ vyatta-keepalived (>= 1.2.2)
+Description: Vyatta VRRP configureation/operational commands
+ Vyatta configuration/operational templates and scripts for VRRP

@@ -1,0 +1,5 @@
+vyatta-vrrp (0.1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 15 May 2012 13:15:53 -0700

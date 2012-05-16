@@ -1,0 +1,7 @@
+The Debian Package vyatta-vrrp
+---------------------------------
+
+This package has the Vyatta configuration/operational templates and scripts for VRRP
+
+ -- John Southworth <john.southworth@vyatta.com> Tue, 15 May 2012
+

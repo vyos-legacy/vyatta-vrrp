@@ -1,0 +1,2 @@
+vyatta-vrrp: file-in-unusual-dir
+vyatta-vrrp: dir-or-file-in-opt

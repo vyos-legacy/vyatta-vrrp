@@ -8,8 +8,9 @@ Standards-Version: 3.7.2
 Package: vyatta-vrrp
 Architecture: all
 Depends: perl,
- vyatta-cfg,
- vyatta-op,
+ vyatta-cfg (>= 0.99.83),
+ vyatta-cfg-system (>= 0.20.8),
+ vyatta-op (>= 0.13.259),
  vyatta-bash | bash (>= 3.1),
  vyatta-keepalived (>= 1.2.2)
 Description: Vyatta VRRP configureation/operational commands

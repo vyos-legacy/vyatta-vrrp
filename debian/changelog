@@ -1,3 +1,10 @@
+vyatta-vrrp (0.4) unstable; urgency=low
+
+  * Create share_perl5dir destination directory in the debian build
+    directory
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 15 May 2012 21:38:12 -0700
+
 vyatta-vrrp (0.3) unstable; urgency=low
 
   * Fix Makefile

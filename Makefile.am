@@ -24,6 +24,6 @@ install-exec-hook:
 	cd $(gentmpdir); $(cpiop) $(DESTDIR)$(cfgdir)
 	mkdir -p $(DESTDIR)$(opdir)
 	cd templates-op; $(cpiop) $(DESTDIR)$(opdir)
-	mkdir -p $(share_perl5dir)
+	mkdir -p $(DESTDIR)$(share_perl5dir)
 	cd lib; $(cpiop) $(DESTDIR)$(share_perl5dir)
 	

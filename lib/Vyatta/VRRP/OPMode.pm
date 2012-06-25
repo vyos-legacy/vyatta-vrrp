@@ -34,7 +34,12 @@ my $PIDFILE='/var/run/vrrp.pid';
 my $DATAFILE='/tmp/keepalived.data';
 my $STATSFILE='/tmp/keepalived.stats';
 
-open my $PIDF, '<', $PIDFILE;
+sub vrrp_norun {
+  printf("VRRP isn't running");
+  exit;
+}
+
+open my $PIDF, '<', $PIDFILE or vrrp_norun;
 my $PID=<$PIDF>;
 close $PIDF;
 

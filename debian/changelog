@@ -1,3 +1,10 @@
+vyatta-vrrp (0.6) unstable; urgency=low
+
+  * Bugfix 8125: Make the operational mode commands act correctly when
+    vrrp isn't running
+
+ -- John Southworth <john.southworth@vyatta.com>  Mon, 25 Jun 2012 15:38:17 -0700
+
 vyatta-vrrp (0.5) unstable; urgency=low
 
   * Add version dependencies to avoid conflicts

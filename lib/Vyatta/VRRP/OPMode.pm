@@ -157,7 +157,7 @@ sub find_sync {
    my ($intf, $vrid, $dh)  = @_;
    my $instance = "vyatta-$intf-$vrid";
    foreach my $sync (sort versioncmp keys(%{$dh->{'sync-groups'}})){
-     return $sync if (grep { $instance } @{$dh->{'sync-groups'}->{$sync}->{monitor}});
+     return $sync if (grep { /$instance/ } @{$dh->{'sync-groups'}->{$sync}->{monitor}});
    }
    return;
 }

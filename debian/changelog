@@ -1,3 +1,9 @@
+vyatta-vrrp (0.7) unstable; urgency=low
+
+  * Fix show vrrp sync-group command
+
+ -- John Southworth <john.southworth@vyatta.com>  Wed, 18 Jul 2012 08:19:52 -0700
+
 vyatta-vrrp (0.6) unstable; urgency=low
 
   * Bugfix 8125: Make the operational mode commands act correctly when

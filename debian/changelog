@@ -1,3 +1,9 @@
+vyatta-vrrp (0.8) unstable; urgency=low
+
+  * Eliminate state files from old operational mode implementation
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 07 Aug 2012 09:14:58 -0700
+
 vyatta-vrrp (0.7) unstable; urgency=low
 
   * Fix show vrrp sync-group command

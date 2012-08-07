@@ -25,7 +25,7 @@
 package Vyatta::VRRP::OPMode;
 use strict;
 use warnings;
-our @EXPORT = qw(process_data process_stats print_summary print_stats print_sync print_detail check_intf);
+our @EXPORT = qw(get_pid process_data process_stats print_summary print_stats print_sync print_detail check_intf);
 use base qw(Exporter);
 
 use Sort::Versions;
@@ -39,9 +39,12 @@ sub vrrp_norun {
   exit;
 }
 
-open my $PIDF, '<', $PIDFILE or vrrp_norun;
-my $PID=<$PIDF>;
-close $PIDF;
+sub get_pid {
+  open my $PIDF, '<', $PIDFILE or vrrp_norun;
+  my $PID=<$PIDF>;
+  close $PIDF;
+  return $PID;
+}
 
 sub trim {
   my $string = shift;
@@ -79,7 +82,7 @@ sub add_to_datahash {
 sub process_data {
   my ($dh) = @_;
   my ($instance, $interface, $in_sync, $in_vip);
-  kill 'SIGUSR1', $PID;
+  kill 'SIGUSR1', get_pid();
   open my $DATA, '<',  $DATAFILE;
   while (<$DATA>)
   {
@@ -265,7 +268,7 @@ sub print_summary {
 sub process_stats {
   my ($sh) = @_;
   my ($instance, $interface, $section);
-  kill 'SIGUSR2', $PID;
+  kill 'SIGUSR2', get_pid();
   open my $STATS, '<', $STATSFILE;
   while (<$STATS>)
   {

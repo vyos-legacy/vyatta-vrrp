@@ -27,6 +27,7 @@ use lib '/opt/vyatta/share/perl5/';
 use Vyatta::Keepalived;
 use Vyatta::Interface;
 use Vyatta::Misc;
+use Vyatta::VRRP::OPMode;
 
 use Getopt::Long;
 use Sys::Syslog qw(:standard :macros);
@@ -219,15 +220,18 @@ if ($action eq 'clear_master') {
     }
 
     my $instance = 'vyatta-' . "$vrrp_intf" . '-' . "$vrrp_group";
-    my $state_file = Vyatta::Keepalived::get_state_file($vrrp_intf, $vrrp_group);
-    if (! -f $state_file) {
-	print "Invalid interface/group [$vrrp_intf][$vrrp_group]\n";
-	exit 1;
+    my %data_hash = ();
+    process_data(\%data_hash);
+    if (!defined($data_hash{instances}->{$vrrp_intf}->{$vrrp_group})) {
+      print "Invalid interface/group [$vrrp_intf][$vrrp_group]\n";
+      exit 1;
     }
+    my $state = $data_hash{instances}->{$vrrp_intf}->{$vrrp_group}->{state};
+    my $interval = $data_hash{instances}->{$vrrp_intf}->{$vrrp_group}->{'advert-interval'};
+    $interval =~ s/(\d+).*/$1/;
+    my $priority = $data_hash{instances}->{$vrrp_intf}->{$vrrp_group}->{priority};
 
-    my ($start_time, $intf, $group, $state, $ltime) = 
-	Vyatta::Keepalived::vrrp_state_parse($state_file);  
-    if ($state ne 'master') {
+    if ($state ne 'MASTER') {
 	print "vrrp group $vrrp_group on $vrrp_intf is already in backup\n";
 	exit 1;
     }
@@ -241,7 +245,7 @@ if ($action eq 'clear_master') {
     my $conf = <$f>;
     close $f;
 
-    my $sync_group = list_vrrp_sync_group($intf, $group);
+    my $sync_group = list_vrrp_sync_group($vrrp_intf, $vrrp_group);
     my @instances = ();
     if (defined($sync_group)) {
         print "vrrp group $vrrp_group on $vrrp_intf is in sync-group " 
@@ -284,7 +288,8 @@ if ($action eq 'clear_master') {
 
     restart_daemon($conf_file);
 
-    sleep(3);
+    my $sleep_time = (3 * $interval) + 2; #sleep for an appropriate amount of time
+    sleep($sleep_time);
     
     #
     # add modified instance back and restart

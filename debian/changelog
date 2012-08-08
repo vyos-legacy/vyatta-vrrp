@@ -1,3 +1,12 @@
+vyatta-vrrp (0.10) unstable; urgency=low
+
+  * Warn users when vrrp operational data may be out of date because the
+    process is taking a long time to respond, this is normally due to an
+    in progress transition with a lot (hundreds) of members in a single
+    sync-group
+
+ -- John Southworth <john.southworth@vyatta.com>  Wed, 08 Aug 2012 08:59:31 -0700
+
 vyatta-vrrp (0.9) unstable; urgency=low
 
   * Sort sync-group members before display

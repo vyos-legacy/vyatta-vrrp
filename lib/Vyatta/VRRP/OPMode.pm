@@ -79,10 +79,41 @@ sub add_to_datahash {
   }
 }
 
+sub wait_for_data {
+  my $file = shift;
+  my $curtime = time();
+  my $timestamp;
+  my $attempts = 0;
+  while ($attempts < 4)
+  {
+    ++$attempts;
+    if (! -e $file){
+      sleep(1);
+      next;
+    }
+    $timestamp = (stat($file))[9];
+    if ($timestamp < $curtime) {
+      sleep(1);
+    } else {
+      last;
+    }
+  }
+  if (! -e $file){
+    printf "VRRP process not responding to request for operational data\n";
+    exit(1);
+  }
+  if ($timestamp < $curtime){
+      printf "VRRP process not responding to request for operational data\n";
+      printf "  The data displayed may be out of data\n";
+      printf "  This is normally due to a in progress transition\n";
+  }
+}
+
 sub process_data {
   my ($dh) = @_;
   my ($instance, $interface, $in_sync, $in_vip);
   kill 'SIGUSR1', get_pid();
+  wait_for_data($DATAFILE);
   open my $DATA, '<',  $DATAFILE;
   while (<$DATA>)
   {
@@ -269,6 +300,7 @@ sub process_stats {
   my ($sh) = @_;
   my ($instance, $interface, $section);
   kill 'SIGUSR2', get_pid();
+  wait_for_data($STATSFILE);
   open my $STATS, '<', $STATSFILE;
   while (<$STATS>)
   {

@@ -363,7 +363,7 @@ sub print_sync {
     printf "---------\n"; 
     printf "  State: %s\n", $dh->{'sync-groups'}->{$sync}->{state};
     printf "  Monitoring:\n";
-    foreach my $mon (@{$dh->{'sync-groups'}->{$sync}->{monitor}}){
+    foreach my $mon (sort versioncmp @{$dh->{'sync-groups'}->{$sync}->{monitor}}){
       my ($intf, $vrid) = $mon =~ m/vyatta-(.*?)-(.*)/;
       printf "    Interface: %s, Group: %s\n", $intf, $vrid;
     }

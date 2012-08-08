@@ -1,3 +1,9 @@
+vyatta-vrrp (0.9) unstable; urgency=low
+
+  * Sort sync-group members before display
+
+ -- John Southworth <john.southworth@vyatta.com>  Wed, 08 Aug 2012 08:18:39 -0700
+
 vyatta-vrrp (0.8) unstable; urgency=low
 
   * Eliminate state files from old operational mode implementation

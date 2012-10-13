@@ -1,3 +1,9 @@
+vyatta-vrrp (0.10+pacifica1) unstable; urgency=low
+
+  * new branch
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 12 Oct 2012 18:50:44 -0700
+
 vyatta-vrrp (0.10) unstable; urgency=low
 
   * Warn users when vrrp operational data may be out of date because the

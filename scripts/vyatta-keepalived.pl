@@ -309,7 +309,7 @@ sub keepalived_get_values {
       $output .= "\tnotify_backup \"$state_transition_script backup ";
       $output .= "$intf $group $transition_intf \'$run_backup_script\' @vips\" \n";
     }
-    if ($run_backup_script ne 'null') {
+    if ($run_fault_script ne 'null') {
       $output .= "\tnotify_fault \"$state_transition_script fault ";
       $output .= "$intf $group $transition_intf \'$run_fault_script\' @vips\" \n";
     }

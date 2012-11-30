@@ -1,3 +1,9 @@
+vyatta-vrrp (0.10+pacifica3) unstable; urgency=low
+
+  * Bugfix: 8508 fix fault script addition failure
+
+ -- John Southworth <john.southworth@vyatta.com>  Fri, 30 Nov 2012 09:37:59 -0800
+
 vyatta-vrrp (0.10+pacifica2) unstable; urgency=low
 
   * new branch

@@ -1,3 +1,9 @@
+vyatta-vrrp (0.13) unstable; urgency=low
+
+  * vrrp: don't generate bonding templates anymore
+
+ -- John Southworth <john.southworth@vyatta.com>  Mon, 04 Mar 2013 16:34:28 -0800
+
 vyatta-vrrp (0.12) unstable; urgency=low
 
   * Bugfix: 8508 fix fault script addition failure

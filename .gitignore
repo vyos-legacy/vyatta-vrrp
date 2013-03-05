@@ -21,6 +21,7 @@ debian/vyatta-vrrp
 debian/vyatta-vrrp.postinst
 debian/*.debhelper.log
 debian/*.substvars
+generated-templates/
 INSTALL
 Makefile.in
 Makefile

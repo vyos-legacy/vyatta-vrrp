@@ -31,8 +31,8 @@ my $debug = $ENV{'DEBUG'};
 my %interface_hash = (
     'ethernet/node.tag'                             => '$VAR(@)',
     'ethernet/node.tag/vif/node.tag'                => '$VAR(../@).$VAR(@)',
-    'bonding/node.tag'                              => '$VAR(@)',
-    'bonding/node.tag/vif/node.tag'                 => '$VAR(../@).$VAR(@)',
+#    'bonding/node.tag'                              => '$VAR(@)',
+#    'bonding/node.tag/vif/node.tag'                 => '$VAR(../@).$VAR(@)',
 );
 
 sub gen_template {

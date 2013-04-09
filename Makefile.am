@@ -14,6 +14,7 @@ cpiop = find  . ! -regex '\(.*~\|.*\.bak\|.*\.swp\|.*\#.*\#\)' -print0 | \
   cpio -0pd
 
 all-local:
+	rm -rf $(gentmpdir)
 	./gen-interface-templates.pl $(gentmpdir)
 
 clean-local:
@@ -26,4 +27,3 @@ install-exec-hook:
 	cd templates-op; $(cpiop) $(DESTDIR)$(opdir)
 	mkdir -p $(DESTDIR)$(share_perl5dir)
 	cd lib; $(cpiop) $(DESTDIR)$(share_perl5dir)
-	

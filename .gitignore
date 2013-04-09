@@ -18,6 +18,8 @@ config.sub
 configure
 debian/files
 debian/vyatta-vrrp
+debian/vyatta-vrrp-dataplane
+debian/tmp
 debian/vyatta-vrrp.postinst
 debian/*.debhelper.log
 debian/*.substvars

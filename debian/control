@@ -15,3 +15,10 @@ Depends: perl,
  vyatta-keepalived (>= 1.2.2)
 Description: Vyatta VRRP configureation/operational commands
  Vyatta configuration/operational templates and scripts for VRRP
+
+Package: vyatta-vrrp-dataplane
+Architecture: all
+Depends:  vyatta-vrrp, vyatta-cfg-dataplane
+Description: vyatta-vrrp dataplane templates
+ Vyatta configuration templates for VRRP use on dataplane devices
+

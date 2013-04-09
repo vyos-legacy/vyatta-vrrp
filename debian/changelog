@@ -1,3 +1,9 @@
+vyatta-vrrp (0.15) unstable; urgency=low
+
+  * Add dataplane interface templates and split the packages
+
+ -- John Southworth <john.southworth@vyatta.com>  Tue, 09 Apr 2013 12:26:49 -0700
+
 vyatta-vrrp (0.14) unstable; urgency=low
 
   * Force Build

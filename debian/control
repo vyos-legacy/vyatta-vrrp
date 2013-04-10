@@ -18,7 +18,7 @@ Description: Vyatta VRRP configureation/operational commands
 
 Package: vyatta-vrrp-dataplane
 Architecture: all
-Depends:  vyatta-vrrp, vyatta-cfg-dataplane
+Depends:  vyatta-vrrp, vplane-config
 Description: vyatta-vrrp dataplane templates
  Vyatta configuration templates for VRRP use on dataplane devices
 

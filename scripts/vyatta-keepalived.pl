@@ -34,10 +34,11 @@ use Getopt::Long;
 use strict;
 use warnings;
 
-my ( $action, $vrrp_intf, $vrrp_group, $vrrp_vip, $ctsync );
+my ( $action, $vrrp_intf, $vrrp_group, $vrrp_vip, $ctsync, $connsync );
 my ( $conf_file, $changes_file );
 my %HoA_sync_groups;
 my $ctsync_script = "/opt/vyatta/sbin/vyatta-vrrp-conntracksync.sh";
+my $sync_dp_script = "/opt/vyatta/sbin/vyatta-vrrp-csyncd.sh";
 
 sub validate_source_addr {
   my ( $ifname, $source_addr ) = @_;
@@ -322,11 +323,17 @@ sub keepalived_get_values {
 sub vrrp_get_sync_groups {
 
   my $output = "";
+  my $is_dp = 'false';
 
   foreach my $sync_group ( keys %HoA_sync_groups ) {
     $output .= "vrrp_sync_group $sync_group \{\n\tgroup \{\n";
     foreach my $vrrp_instance ( 0 .. $#{ $HoA_sync_groups{$sync_group} } ) {
       $output .= "\t\t$HoA_sync_groups{$sync_group}[$vrrp_instance]\n";
+      if ( $HoA_sync_groups{$sync_group}[$vrrp_instance] =~ m/vyatta-dp*/ ) {
+         $is_dp = 'true';
+      } else {
+         $is_dp = 'false';
+      }
     }
     $output .= "\t\}\n";
 
@@ -338,6 +345,10 @@ sub vrrp_get_sync_groups {
       $output .= "\tnotify_master \"$ctsync_script master $sync_group\"\n";
       $output .= "\tnotify_backup \"$ctsync_script backup $sync_group\"\n";
       $output .= "\tnotify_fault \"$ctsync_script fault $sync_group\"\n";
+    } elsif ( !defined $failover_sync_grp && $is_dp eq 'true' && defined $connsync) {
+      $output .= "\tnotify_master \"$sync_dp_script master $sync_group\"\n";
+      $output .= "\tnotify_backup \"$sync_dp_script backup $sync_group\"\n";
+      $output .= "\tnotify_fault \"$sync_dp_script fault $sync_group\"\n";
     }
     $output .= "\}\n";
   }
@@ -498,6 +509,7 @@ GetOptions(
   "group=s"       => \$vrrp_group,
   "vip=s"         => \$vrrp_vip,
   "ctsync=s"      => \$ctsync,
+  "connsync=s"    => \$connsync,
 );
 
 if ( !defined $action ) {

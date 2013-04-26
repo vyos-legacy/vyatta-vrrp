@@ -1,3 +1,9 @@
+vyatta-vrrp (0.17) unstable; urgency=low
+
+  * Vrrp trigger to dataplane.
+
+ -- Saurabh Mohan <saurabh@vyatta.com>  Thu, 25 Apr 2013 17:59:10 -0700
+
 vyatta-vrrp (0.16) unstable; urgency=low
 
   * fix dataplane package dependency

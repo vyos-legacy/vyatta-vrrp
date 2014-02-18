@@ -281,6 +281,7 @@ sub keepalived_get_values {
 	$output .= "$group\n";
     }
     $output .= "\tpriority $priority\n";
+    $output .= "\tnative_ipv6\n";
     if ( $preempt eq "false" ) {
       $output .= "\tnopreempt\n";
     }

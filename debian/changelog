@@ -1,3 +1,12 @@
+vyatta-vrrp (0.11+vyos1+helium2) unstable; urgency=low
+
+  [ Florian Fuessl ]
+  * add IPv6 support to vyatta-vrrp (keepalived).
+
+  [ Daniil Baturin ]
+
+ -- Daniil Baturin <daniil@baturin.org>  Thu, 06 Mar 2014 18:48:49 +0100
+
 vyatta-vrrp (0.11+vyos1+helium1) unstable; urgency=low
 
   * New branch

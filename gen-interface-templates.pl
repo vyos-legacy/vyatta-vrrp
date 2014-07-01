@@ -29,12 +29,14 @@ my $debug = $ENV{'DEBUG'};
 
 # Mapping from configuration level to ifname used AT THAT LEVEL
 my %interface_hash = (
-    'ethernet/node.tag'                             => '$VAR(@)',
-    'ethernet/node.tag/vif/node.tag'                => '$VAR(../@).$VAR(@)',
-    'ethernet/node.tag/vif/node.tag/vif/node.tag'   => '$VAR(../../@).$VAR(../@).$VAR(@)',
-    'bonding/node.tag'                              => '$VAR(@)',
-    'bonding/node.tag/vif/node.tag'                 => '$VAR(../@).$VAR(@)',
-    'bonding/node.tag/vif/node.tag/vif/node.tag'    => '$VAR(../../@).$VAR(../@).$VAR(@)',
+    'ethernet/node.tag'                               => '$VAR(@)',
+    'ethernet/node.tag/vif/node.tag'                  => '$VAR(../@).$VAR(@)',
+    'ethernet/node.tag/vif-s/node.tag'                => '$VAR(../@).$VAR(@)',
+    'ethernet/node.tag/vif-s/node.tag/vif-c/node.tag' => '$VAR(../../@).$VAR(../@).$VAR(@)',
+    'bonding/node.tag'                                => '$VAR(@)',
+    'bonding/node.tag/vif/node.tag'                   => '$VAR(../@).$VAR(@)',
+    'bonding/node.tag/vif-s/node.tag'                 => '$VAR(../@).$VAR(@)',
+    'bonding/node.tag/vif-s/node.tag/vif-c/node.tag'  => '$VAR(../../@).$VAR(../@).$VAR(@)',
 );
 
 sub gen_template {

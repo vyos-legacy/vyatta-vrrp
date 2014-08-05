@@ -1,3 +1,13 @@
+vyatta-vrrp (0.11+vyos1+helium3) unstable; urgency=low
+
+  [ Kim Hagen ]
+  * Add QinQ to interfaces in template generator.
+  * Set separate virtual interface for QinQ.
+
+  [ Daniil Baturin ]
+
+ -- Daniil Baturin <daniil@baturin.org>  Tue, 05 Aug 2014 16:33:00 +0000
+
 vyatta-vrrp (0.11+vyos1+helium2) unstable; urgency=low
 
   [ Florian Fuessl ]

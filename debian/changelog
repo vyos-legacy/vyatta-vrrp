@@ -1,3 +1,9 @@
+vyatta-vrrp (0.11+vyos2+lithium2) unstable; urgency=low
+
+  * Update maintainer address
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Sun, 28 Dec 2014 08:20:00 +0000
+ 
 vyatta-vrrp (0.11+vyos2+lithium1) unstable; urgency=low
 
   * New branch

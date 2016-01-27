@@ -4,6 +4,7 @@ Priority: extra
 Maintainer: VyOS Package Maintainers <maintainers@vyos.net>
 Build-Depends: debhelper (>= 5), autotools-dev, automake, autoconf, cpio
 Standards-Version: 3.9.1
+
 Package: vyatta-vrrp
 Architecture: all
 Depends: perl,

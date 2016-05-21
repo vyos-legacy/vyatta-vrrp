@@ -246,8 +246,10 @@ sub print_detail {
           ($dh->{instances}->{$interface}->{$vrid}->{priority} == 255) ? 'yes': 'no';
         printf "\n";
       }
-      printf "  Source Address:\t\t%s\n",
+      if (defined($dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'})) { 
+        printf "  Source Address:\t\t%s\n",
         $dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'};
+      }
       printf "  Priority:\t\t\t%s\n",
         $dh->{instances}->{$interface}->{$vrid}->{'priority'};
       printf "  Advertisement interval:\t%s\n",

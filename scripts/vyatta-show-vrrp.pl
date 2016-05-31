@@ -28,6 +28,7 @@ use Getopt::Long;
 use Vyatta::VRRP::OPMode;
 use Sort::Versions;
 use v5.10;
+use experimental 'smartmatch';
 
 my ($show, $intf, $vrid);
 GetOptions("show=s" => \$show,

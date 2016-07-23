@@ -145,6 +145,11 @@ sub keepalived_get_values {
       next;
     }
 
+    my $multicast_on_ipv6 = 0;
+    if ($config->exists("multicast-on-ipv6")) {
+        $multicast_on_ipv6 = 1;
+    }
+
     my $use_vmac = 0;
     my $transition_intf = $intf;
     if ( $config->exists("rfc3768-compatibility") ) {
@@ -275,6 +280,9 @@ sub keepalived_get_values {
     $output .= "\tstate $init_state\n";
     $output .= "\tinterface $intf\n";
     $output .= "\tvirtual_router_id $group\n";
+    if ($multicast_on_ipv6) {
+        $output .= "\tnative_ipv6\n";
+    }
     if ($use_vmac) {
 	$output .= "\tuse_vmac $intf";
 	$output .= "v";

@@ -308,6 +308,7 @@ sub keepalived_get_values {
       foreach my $vip (@vips_excluded) {
         $output .= "\t\t$vip\n";
       }
+      $output .= "\t\}\n";
     }
     if ($run_master_script ne 'null') {
       $output .= "\tnotify_master \"$state_transition_script master ";

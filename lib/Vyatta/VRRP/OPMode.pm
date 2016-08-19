@@ -25,7 +25,6 @@
 package Vyatta::VRRP::OPMode;
 use strict;
 use warnings;
-no warnings 'uninitialized';
 our @EXPORT = qw(get_pid process_data process_stats print_summary print_stats print_sync print_detail check_intf);
 use base qw(Exporter);
 
@@ -238,17 +237,21 @@ sub print_detail {
           $dh->{instances}->{$interface}->{$vrid}->{'master-priority'};
         printf "\n";
       }
-      if ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne 
-          $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}){
-        printf "  RFC 3768 Compliant\n";
-        printf "  Virtual MAC interface:\t%s\n",
-          $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'};
-        printf "  Address Owner:\t\t%s\n", 
-          ($dh->{instances}->{$interface}->{$vrid}->{priority} == 255) ? 'yes': 'no';
-        printf "\n";
+      if ( defined $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'}) {
+        if ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne 
+            $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}){
+          printf "  RFC 3768 Compliant\n";
+          printf "  Virtual MAC interface:\t%s\n",
+            $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'};
+          printf "  Address Owner:\t\t%s\n", 
+            ($dh->{instances}->{$interface}->{$vrid}->{priority} == 255) ? 'yes': 'no';
+          printf "\n";
+        }
       }
-      printf "  Source Address:\t\t%s\n",
-        $dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'};
+      if ( defined $dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'}) {
+        printf "  Source Address:\t\t%s\n",
+          $dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'};
+      }
       printf "  Priority:\t\t\t%s\n",
         $dh->{instances}->{$interface}->{$vrid}->{'priority'};
       printf "  Advertisement interval:\t%s\n",
@@ -284,9 +287,14 @@ sub print_summary {
     foreach my $vrid (sort versioncmp keys(%{$dh->{instances}->{$interface}})){
       next if ($group && $vrid ne $group);
       my $state = $dh->{instances}->{$interface}->{$vrid}->{state};
-      my $compliant = 
-         ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne
-          $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}) ? 'yes': 'no';
+      my $compliant;
+      if ( defined $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'}) {
+        $compliant =
+           ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne
+            $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}) ? 'yes': 'no';
+      } else {
+        $compliant = "yes";
+      }
       my $addr_owner = ($dh->{instances}->{$interface}->{$vrid}->{priority} == 255) ? 'yes': 'no';
       my $lt = elapse_time($dh->{instances}->{$interface}->{$vrid}->{'last-transition'}, time);
       my $sync = find_sync($interface, $vrid, $dh);

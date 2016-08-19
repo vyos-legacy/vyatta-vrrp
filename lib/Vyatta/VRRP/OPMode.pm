@@ -25,6 +25,7 @@
 package Vyatta::VRRP::OPMode;
 use strict;
 use warnings;
+no warnings 'uninitialized';
 our @EXPORT = qw(get_pid process_data process_stats print_summary print_stats print_sync print_detail check_intf);
 use base qw(Exporter);
 

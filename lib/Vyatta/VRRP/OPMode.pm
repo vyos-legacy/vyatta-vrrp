@@ -190,7 +190,7 @@ sub elapse_time {
 sub find_sync {
    my ($intf, $vrid, $dh)  = @_;
    my $instance = "vyatta-$intf-$vrid";
-   foreach my $sync (sort versioncmp keys(%{$dh->{'sync-groups'}})){
+   foreach my $sync (sort {versioncmp($a, $b)} keys(%{$dh->{'sync-groups'}})){
      return $sync if (grep { /$instance/ } @{$dh->{'sync-groups'}->{$sync}->{monitor}});
    }
    return;
@@ -217,11 +217,11 @@ sub check_intf {
 sub print_detail {
   my ($dh,$intf,$group) = @_;
   print "--------------------------------------------------\n";
-  foreach my $interface (sort versioncmp keys(%{$dh->{instances}})) {
+  foreach my $interface (sort {versioncmp($a, $b)} keys(%{$dh->{instances}})) {
     next if ($intf && $interface ne $intf);
     printf "Interface: %s\n", $interface;
     printf "--------------\n";
-    foreach my $vrid (sort versioncmp keys(%{$dh->{instances}->{$interface}})){
+    foreach my $vrid (sort {versioncmp($a, $b)} keys(%{$dh->{instances}->{$interface}})){
       next if ($group && $vrid ne $group);
       printf "  Group: %s\n", $vrid;
       printf "  ----------\n";
@@ -282,9 +282,9 @@ sub print_summary {
   printf $format, '','','','RFC','Addr','Last','Sync';
   printf $format, 'Interface','Group','State','Compliant','Owner','Transition','Group';
   printf $format, '---------','-----','-----','---------','-----','----------','-----';
-  foreach my $interface (sort versioncmp keys(%{$dh->{instances}})) {
+  foreach my $interface (sort {versioncmp($a, $b)} keys(%{$dh->{instances}})) {
     next if ($intf && $interface ne $intf);
-    foreach my $vrid (sort versioncmp keys(%{$dh->{instances}->{$interface}})){
+    foreach my $vrid (sort {versioncmp($a, $b)} keys(%{$dh->{instances}->{$interface}})){
       next if ($group && $vrid ne $group);
       my $state = $dh->{instances}->{$interface}->{$vrid}->{state};
       my $compliant;
@@ -346,11 +346,11 @@ sub process_stats {
 sub print_stats {
   my ($sh, $intf, $group) = @_;
   print "--------------------------------------------------\n";
-  foreach my $interface (sort versioncmp keys(%{$sh->{instances}})) {
+  foreach my $interface (sort {versioncmp($a, $b)} keys(%{$sh->{instances}})) {
     next if ($intf && $interface ne $intf);
     printf "Interface: %s\n", $interface;
     printf "--------------\n";
-    foreach my $vrid (sort versioncmp keys(%{$sh->{instances}->{$interface}})){
+    foreach my $vrid (sort {versioncmp($a, $b)} keys(%{$sh->{instances}->{$interface}})){
       next if ($group && $vrid ne $group);
       printf "  Group: %s\n", $vrid;
       printf "  ----------\n";
@@ -398,13 +398,13 @@ sub print_stats {
 sub print_sync {
   my ($dh, $sync_group) = @_;
   print "--------------------------------------------------\n";
-  foreach my $sync (sort versioncmp keys(%{$dh->{'sync-groups'}})){
+  foreach my $sync (sort {versioncmp($a, $b)} keys(%{$dh->{'sync-groups'}})){
     next if ($sync_group && $sync ne $sync_group);
     printf "Group: %s\n", $sync; 
     printf "---------\n"; 
     printf "  State: %s\n", $dh->{'sync-groups'}->{$sync}->{state};
     printf "  Monitoring:\n";
-    foreach my $mon (sort versioncmp @{$dh->{'sync-groups'}->{$sync}->{monitor}}){
+    foreach my $mon (sort {versioncmp($a, $b)} @{$dh->{'sync-groups'}->{$sync}->{monitor}}){
       my ($intf, $vrid) = $mon =~ m/vyatta-(.*?)-(.*)/;
       printf "    Interface: %s, Group: %s\n", $intf, $vrid;
     }

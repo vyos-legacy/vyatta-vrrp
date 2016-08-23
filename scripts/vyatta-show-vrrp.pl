@@ -41,16 +41,16 @@ sub list_vrrp_intf {
   my $hash = {};
   process_data $hash;
   if ($intf) {
-    printf "%s\n", join " ", sort versioncmp keys(%{$hash->{instances}->{$intf}});
+    printf "%s\n", join " ", sort {versioncmp($a, $b)} keys(%{$hash->{instances}->{$intf}});
   } else {
-    printf "%s\n", join " ", sort versioncmp keys(%{$hash->{instances}});
+    printf "%s\n", join " ", sort {versioncmp($a, $b)} keys(%{$hash->{instances}});
   }
 }
 
 sub list_vrrp_sync_groups {
     my $hash = {};
     process_data $hash;
-    printf "%s\n", join " ", sort versioncmp keys(%{$hash->{'sync-groups'}});
+    printf "%s\n", join " ", sort {versioncmp($a, $b)} keys(%{$hash->{'sync-groups'}});
 }
 
 sub show_vrrp_summary {

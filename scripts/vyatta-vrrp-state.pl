@@ -95,6 +95,10 @@ if ($vrrp_state eq 'backup') {
 }
 
 if (!($vrrp_transitionscript eq 'null')){
+    # Run with vyattacfg GID to preserver proper active config dir permissions
+    my @groupdata = getgrnam "vyattacfg";
+    my $gid = $groupdata[2];
+    setgid($gid);
     exec("$vrrp_transitionscript $vrrp_state $vrrp_intf $vrrp_group");
 }
 

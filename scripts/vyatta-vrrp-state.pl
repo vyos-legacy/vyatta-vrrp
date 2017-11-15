@@ -63,7 +63,7 @@ if (defined $old_state and $vrrp_state eq $old_state) {
     # changed.
     #
     Vyatta::Keepalived::vrrp_log("$vrrp_intf $vrrp_group same - $vrrp_state");
-    exit 0;
+    #exit 0;
 }
 
 Vyatta::Keepalived::vrrp_log("$vrrp_intf $vrrp_group transition to $vrrp_state");

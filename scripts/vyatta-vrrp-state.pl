@@ -63,7 +63,7 @@ if (defined $old_state and $vrrp_state eq $old_state) {
     # changed.
     #
     Vyatta::Keepalived::vrrp_log("$vrrp_intf $vrrp_group same - $vrrp_state");
-    exit 0;
+    #exit 0;
 }
 
 Vyatta::Keepalived::vrrp_log("$vrrp_intf $vrrp_group transition to $vrrp_state");
@@ -95,6 +95,10 @@ if ($vrrp_state eq 'backup') {
 }
 
 if (!($vrrp_transitionscript eq 'null')){
+    # Run with vyattacfg GID to preserver proper active config dir permissions
+    my @groupdata = getgrnam "vyattacfg";
+    my $gid = $groupdata[2];
+    setgid($gid);
     exec("$vrrp_transitionscript $vrrp_state $vrrp_intf $vrrp_group");
 }
 

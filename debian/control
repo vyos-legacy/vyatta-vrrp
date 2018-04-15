@@ -1,9 +1,9 @@
 Source: vyatta-vrrp
 Section: contrib/net
 Priority: extra
-Maintainer: Vyatta Package Maintainers <maintainers@vyatta.com>
-Build-Depends: debhelper (>= 5), autotools-dev
-Standards-Version: 3.7.2
+Maintainer: VyOS Package Maintainers <maintainers@vyos.net>
+Build-Depends: debhelper (>= 5), autotools-dev, automake, autoconf, cpio
+Standards-Version: 3.9.1
 
 Package: vyatta-vrrp
 Architecture: all
@@ -12,6 +12,6 @@ Depends: perl,
  vyatta-cfg-system (>= 0.20.8),
  vyatta-op (>= 0.13.259),
  vyatta-bash | bash (>= 3.1),
- vyatta-keepalived (>= 1.2.2)
-Description: Vyatta VRRP configureation/operational commands
- Vyatta configuration/operational templates and scripts for VRRP
+ keepalived (>= 1.2.2)
+Description: VyOS configuration and operational commands for VRRP
+ VyOS configuration and operational templates and scripts for VRRP

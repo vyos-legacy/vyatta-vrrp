@@ -1,3 +1,36 @@
+vyatta-vrrp (0.11+vyos2+current2) unstable; urgency=medium
+
+  * Fix merge conflict.
+
+ -- Daniil Baturin <daniil@baturin.org>  Wed, 27 Jan 2016 08:45:30 -0500
+
+vyatta-vrrp (0.11+vyos2+current1) unstable; urgency=medium
+
+  [ Thomas Jepp ]
+  * Fix build depends.
+
+  [ Kim Hagen ]
+
+ -- Kim Hagen <kim.sidney@gmail.com>  Sun, 24 Jan 2016 15:27:02 -0500
+
+vyatta-vrrp (0.11+vyos2+lithium3) unstable; urgency=low
+
+  * vyatta-vrrp: update dh_gencontrol with new development build flag
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Sun, 21 Jun 2015 11:20:41 +0100
+ 
+vyatta-vrrp (0.11+vyos2+lithium2) unstable; urgency=low
+
+  * Update maintainer address
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Sun, 28 Dec 2014 08:20:00 +0000
+ 
+vyatta-vrrp (0.11+vyos2+lithium1) unstable; urgency=low
+
+  * New branch
+
+ -- Alex Harpin <development@landsofshadow.co.uk>  Fri, 05 Dec 2014 20:17:17 +0000
+ 
 vyatta-vrrp (0.11+vyos1+helium4) unstable; urgency=low
 
   * Revert "add IPv6 support to vyatta-vrrp (keepalived)."

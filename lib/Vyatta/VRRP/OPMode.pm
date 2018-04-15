@@ -190,7 +190,7 @@ sub elapse_time {
 sub find_sync {
    my ($intf, $vrid, $dh)  = @_;
    my $instance = "vyatta-$intf-$vrid";
-   foreach my $sync (sort versioncmp keys(%{$dh->{'sync-groups'}})){
+   foreach my $sync (sort {versioncmp($a, $b)} keys(%{$dh->{'sync-groups'}})){
      return $sync if (grep { /$instance/ } @{$dh->{'sync-groups'}->{$sync}->{monitor}});
    }
    return;
@@ -217,11 +217,11 @@ sub check_intf {
 sub print_detail {
   my ($dh,$intf,$group) = @_;
   print "--------------------------------------------------\n";
-  foreach my $interface (sort versioncmp keys(%{$dh->{instances}})) {
+  foreach my $interface (sort {versioncmp($a, $b)} keys(%{$dh->{instances}})) {
     next if ($intf && $interface ne $intf);
     printf "Interface: %s\n", $interface;
     printf "--------------\n";
-    foreach my $vrid (sort versioncmp keys(%{$dh->{instances}->{$interface}})){
+    foreach my $vrid (sort {versioncmp($a, $b)} keys(%{$dh->{instances}->{$interface}})){
       next if ($group && $vrid ne $group);
       printf "  Group: %s\n", $vrid;
       printf "  ----------\n";
@@ -237,17 +237,21 @@ sub print_detail {
           $dh->{instances}->{$interface}->{$vrid}->{'master-priority'};
         printf "\n";
       }
-      if ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne 
-          $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}){
-        printf "  RFC 3768 Compliant\n";
-        printf "  Virtual MAC interface:\t%s\n",
-          $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'};
-        printf "  Address Owner:\t\t%s\n", 
-          ($dh->{instances}->{$interface}->{$vrid}->{priority} == 255) ? 'yes': 'no';
-        printf "\n";
+      if ( defined $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'}) {
+        if ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne 
+            $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}){
+          printf "  RFC 3768 Compliant\n";
+          printf "  Virtual MAC interface:\t%s\n",
+            $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'};
+          printf "  Address Owner:\t\t%s\n", 
+            ($dh->{instances}->{$interface}->{$vrid}->{priority} == 255) ? 'yes': 'no';
+          printf "\n";
+        }
       }
-      printf "  Source Address:\t\t%s\n",
-        $dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'};
+      if ( defined $dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'}) {
+        printf "  Source Address:\t\t%s\n",
+          $dh->{instances}->{$interface}->{$vrid}->{'using-mcast-src_ip'};
+      }
       printf "  Priority:\t\t\t%s\n",
         $dh->{instances}->{$interface}->{$vrid}->{'priority'};
       printf "  Advertisement interval:\t%s\n",
@@ -278,14 +282,19 @@ sub print_summary {
   printf $format, '','','','RFC','Addr','Last','Sync';
   printf $format, 'Interface','Group','State','Compliant','Owner','Transition','Group';
   printf $format, '---------','-----','-----','---------','-----','----------','-----';
-  foreach my $interface (sort versioncmp keys(%{$dh->{instances}})) {
+  foreach my $interface (sort {versioncmp($a, $b)} keys(%{$dh->{instances}})) {
     next if ($intf && $interface ne $intf);
-    foreach my $vrid (sort versioncmp keys(%{$dh->{instances}->{$interface}})){
+    foreach my $vrid (sort {versioncmp($a, $b)} keys(%{$dh->{instances}->{$interface}})){
       next if ($group && $vrid ne $group);
       my $state = $dh->{instances}->{$interface}->{$vrid}->{state};
-      my $compliant = 
-         ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne
-          $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}) ? 'yes': 'no';
+      my $compliant;
+      if ( defined $dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'}) {
+        $compliant =
+           ($dh->{instances}->{$interface}->{$vrid}->{'transmitting-device'} ne
+            $dh->{instances}->{$interface}->{$vrid}->{'listening-device'}) ? 'yes': 'no';
+      } else {
+        $compliant = "yes";
+      }
       my $addr_owner = ($dh->{instances}->{$interface}->{$vrid}->{priority} == 255) ? 'yes': 'no';
       my $lt = elapse_time($dh->{instances}->{$interface}->{$vrid}->{'last-transition'}, time);
       my $sync = find_sync($interface, $vrid, $dh);
@@ -337,11 +346,11 @@ sub process_stats {
 sub print_stats {
   my ($sh, $intf, $group) = @_;
   print "--------------------------------------------------\n";
-  foreach my $interface (sort versioncmp keys(%{$sh->{instances}})) {
+  foreach my $interface (sort {versioncmp($a, $b)} keys(%{$sh->{instances}})) {
     next if ($intf && $interface ne $intf);
     printf "Interface: %s\n", $interface;
     printf "--------------\n";
-    foreach my $vrid (sort versioncmp keys(%{$sh->{instances}->{$interface}})){
+    foreach my $vrid (sort {versioncmp($a, $b)} keys(%{$sh->{instances}->{$interface}})){
       next if ($group && $vrid ne $group);
       printf "  Group: %s\n", $vrid;
       printf "  ----------\n";
@@ -389,13 +398,13 @@ sub print_stats {
 sub print_sync {
   my ($dh, $sync_group) = @_;
   print "--------------------------------------------------\n";
-  foreach my $sync (sort versioncmp keys(%{$dh->{'sync-groups'}})){
+  foreach my $sync (sort {versioncmp($a, $b)} keys(%{$dh->{'sync-groups'}})){
     next if ($sync_group && $sync ne $sync_group);
     printf "Group: %s\n", $sync; 
     printf "---------\n"; 
     printf "  State: %s\n", $dh->{'sync-groups'}->{$sync}->{state};
     printf "  Monitoring:\n";
-    foreach my $mon (sort versioncmp @{$dh->{'sync-groups'}->{$sync}->{monitor}}){
+    foreach my $mon (sort {versioncmp($a, $b)} @{$dh->{'sync-groups'}->{$sync}->{monitor}}){
       my ($intf, $vrid) = $mon =~ m/vyatta-(.*?)-(.*)/;
       printf "    Interface: %s, Group: %s\n", $intf, $vrid;
     }

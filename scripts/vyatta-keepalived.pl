@@ -209,6 +209,14 @@ sub keepalived_get_values {
       $hello_source_addr =~ s/(.*?)\/.*/$1/;
     } 
 
+    my $native_ipv6 = $config->returnValue("native_ipv6");
+    if (defined $native_ipv6 && $native_ipv6 eq "false") {
+      $native_ipv6 = "false";
+    }
+    else {
+      $native_ipv6 = "true";
+    }
+
     $config->setLevel("$path vrrp vrrp-group $group");
     my ($auth_type, $auth_pass) = (undef, undef);
     if ($config->exists('authentication')) {
@@ -281,6 +289,9 @@ sub keepalived_get_values {
 	$output .= "$group\n";
     }
     $output .= "\tpriority $priority\n";
+    if ( $native_ipv6 eq "true" ) {
+      $output .= "\tnative_ipv6\n";
+    }
     if ( $preempt eq "false" ) {
       $output .= "\tnopreempt\n";
     }

@@ -303,7 +303,7 @@ sub keepalived_get_values {
         $output .= "\tmcast_src_ip $hello_source_addr\n";
       }
     }
-    if ( defined $peer_address ) {
+    if ( defined $peer_addr ) {
         $output .= "\tunicast_peer { $peer_address }\n";
     }
     $output .= "\tvirtual_ipaddress \{\n";

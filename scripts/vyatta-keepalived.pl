@@ -304,7 +304,7 @@ sub keepalived_get_values {
       }
     }
     if ( defined $peer_addr ) {
-        $output .= "\tunicast_peer { $peer_address }\n";
+        $output .= "\tunicast_peer { $peer_addr }\n";
     }
     $output .= "\tvirtual_ipaddress \{\n";
     foreach my $vip (@vips) {

@@ -1,0 +1,5 @@
+type: ipv4
+
+help: Unicast VRRP peer address
+
+val_help: Peer address for unicast VRRP

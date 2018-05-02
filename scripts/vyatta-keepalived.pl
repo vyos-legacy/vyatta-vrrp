@@ -207,7 +207,9 @@ sub keepalived_get_values {
     } elsif ($address_owner == 1) {
       $hello_source_addr = $vips[0];
       $hello_source_addr =~ s/(.*?)\/.*/$1/;
-    } 
+    }
+
+    my $peer_addr = $config->returnValue("peer-address");
 
     $config->setLevel("$path vrrp vrrp-group $group");
     my ($auth_type, $auth_pass) = (undef, undef);
@@ -295,7 +297,14 @@ sub keepalived_get_values {
       $output .= "\t\tauth_pass $auth_pass\n\t}\n";
     }
     if ( defined $hello_source_addr ) {
-      $output .= "\tmcast_src_ip $hello_source_addr\n";
+      if ( defined $peer_addr ) {
+        $output .= "\tunicast_src_ip $hello_source_addr\n";
+      } else {
+        $output .= "\tmcast_src_ip $hello_source_addr\n";
+      }
+    }
+    if ( defined $peer_address ) {
+        $output .= "\tunicast_peer { $peer_address }\n";
     }
     $output .= "\tvirtual_ipaddress \{\n";
     foreach my $vip (@vips) {

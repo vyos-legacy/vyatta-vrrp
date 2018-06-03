@@ -155,6 +155,12 @@ sub process_data {
 sub elapse_time {
     my ($start, $stop) = @_;
 
+    # Strip any non-numeric characters after timestamps
+    # Keepalived inserts human-readable date after the timestamp
+    # in keepalived.data
+    $start =~ s/(\d+)[^0-9].*/$1/;
+    $stop =~ s/(\d+)[^0-9].*/$1/;
+
     my $seconds   = $stop - $start;
     my $string    = '';
     my $secs_min  = 60;

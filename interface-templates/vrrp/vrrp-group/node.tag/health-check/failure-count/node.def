@@ -1,0 +1,2 @@
+type: u32
+help: Health check failure count required for transition to fault (default: 3)

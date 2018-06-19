@@ -1,0 +1,2 @@
+type: u32
+help: Health check execution interval in seconds (default: 60s)

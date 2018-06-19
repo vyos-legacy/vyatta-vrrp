@@ -238,6 +238,7 @@ sub keepalived_get_values {
       }
     } 
 
+    # Transition scripts
     $config->setLevel("$path vrrp vrrp-group $group run-transition-scripts");
     my $run_backup_script = $config->returnValue("backup");
     if ( !defined $run_backup_script ) {
@@ -252,8 +253,55 @@ sub keepalived_get_values {
       $run_master_script = "null";
     }
 
+    # Health check script
+    my $health_check_script = undef;
+    my $health_check_interval = undef;
+    my $health_check_count = undef;
+    $config->setLevel("");
+    if ($config->exists("$path vrrp vrrp-group $group health-check")) {
+      $config->setLevel("$path vrrp vrrp-group $group health-check");
+
+      $health_check_script = $config->returnValue("script");
+      if (!defined($health_check_script)) {
+          $err = "health-check requires script option";
+          Vyatta::Config::outputError(\@loc, $err);
+          push @errs, $err;
+          next;
+      }
+      if (!(-x $health_check_script)) {
+         $err = "health-check script does not exist or is not executable";
+          Vyatta::Config::outputError(\@loc, $err);
+          push @errs, $err;
+          next;
+      }
+
+      $health_check_interval = $config->returnValue("interval");
+      if (!defined($health_check_interval)) {
+          $health_check_interval = 60;
+      }
+
+      $health_check_count = $config->returnValue("failure-count");
+      if (!defined($health_check_count)) {
+        $health_check_count = 3;
+      }
+    }
+
+
+
     # We now have the values and have validated them, so
     # generate the config.
+
+    # Health check scripts are outside vrrp_instance'es
+    if (defined($health_check_script)) {
+        $output .= "vrrp_script healthcheck_$vrrp_instance {\n";
+        $output .= "\tscript \"$health_check_script\"\n";
+        $output .= "\tinterval $health_check_interval\n";
+        $output .= "\tfall $health_check_count\n";
+
+        # rise (success count) is hardcoded now
+        $output .= "\trise 1\n";
+        $output .= "\n}\n";
+    }
 
     $output .= "vrrp_instance $vrrp_instance \{\n";
     my $init_state;
@@ -321,6 +369,10 @@ sub keepalived_get_values {
     if ($run_fault_script ne 'null') {
       $output .= "\tnotify_fault \"$state_transition_script fault ";
       $output .= "$intf $group $transition_intf \'$run_fault_script\' @vips\" \n";
+    }
+
+    if (defined($health_check_script)) {
+      $output .= "\n\ttrack_script {\n\t\thealthcheck_$vrrp_instance\n\t}\n";
     }
     $output .= "\}\n\n";
   }

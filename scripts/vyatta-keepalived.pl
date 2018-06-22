@@ -144,6 +144,29 @@ sub keepalived_get_values {
       push @errs, $err;
       next;
     }
+    my @vroutes = $config->listNodes("virtual-route");
+    my @vroutes_parsed = ();
+    my $num_vroutes = scalar(@vroutes);
+    if ($num_vroutes > 0) {
+      foreach my $vroute (@vroutes) {
+        $config->setLevel("$path vrrp vrrp-group $group virtual-route $vroute");
+        if ($config->exists("blackhole")) {
+          push(@vroutes_parsed, "blackhole $vroute");
+        }
+        elsif ($config->exists("next-hop")) {
+          my $next_hop = $config->returnValue("next-hop");
+          push(@vroutes_parsed, "$vroute gw $next_hop");
+        } else {
+          next if $noerr;
+          @loc = split(/ /, "$path vrrp vrrp-group $group virtual-route $vroute");
+          $err = "must define a next-hop or blackhole for virtual-route $vroute";
+          Vyatta::Config::outputError(\@loc, $err);
+          push @errs, $err;
+          next;
+        }
+      }
+      $config->setLevel("$path vrrp vrrp-group $group");
+    }
 
     my $use_vmac = 0;
     my $transition_intf = $intf;
@@ -358,6 +381,13 @@ sub keepalived_get_values {
       $output .= "\t\t$vip\n";
     }
     $output .= "\t\}\n";
+    if ($num_vroutes > 0) {
+      $output .= "\tvirtual_routes \{\n";
+      foreach my $vroute (@vroutes_parsed) {
+        $output .= "\t\t$vroute\n";
+      }
+      $output .= "\t\}\n";
+    }
     if ($run_master_script ne 'null') {
       $output .= "\tnotify_master \"$state_transition_script master ";
       $output .= "$intf $group $transition_intf \'$run_master_script\' @vips\" \n";

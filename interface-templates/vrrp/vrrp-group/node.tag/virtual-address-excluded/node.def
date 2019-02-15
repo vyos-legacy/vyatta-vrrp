@@ -1,0 +1,11 @@
+multi:
+type: txt
+help: Virtual address (not included in VRRP packet)
+
+syntax:expression: exec "
+       if [[ '$VAR(@)' == '*/' ]]; then /opt/vyatta/sbin/valid_address $VAR(@); fi"
+
+val_help: ipv4; Virtual IP address
+val_help: ipv4net; Virtual IP address with prefix
+val_help: ipv6; Virtual IP address
+val_help: ipv6net; Virtual IP address with prefix

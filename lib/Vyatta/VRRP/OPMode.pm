@@ -111,7 +111,7 @@ sub wait_for_data {
 
 sub process_data {
   my ($dh) = @_;
-  my ($instance, $interface, $in_sync, $in_vip);
+  my ($instance, $interface, $in_sync, $in_vip, $in_vip_excluded);
   kill 'SIGUSR1', get_pid();
   wait_for_data($DATAFILE);
   open my $DATA, '<',  $DATAFILE;
@@ -122,6 +122,7 @@ sub process_data {
       $instance = $2;
       $in_sync = undef;
       $in_vip = undef;
+      $in_vip_excluded = undef;
       $dh->{'instances'}->{$interface}->{$instance} = {};
       next;
     };
@@ -129,11 +130,20 @@ sub process_data {
       $instance = $1;
       $interface = undef;
       $in_vip = undef;
+      $in_vip_excluded = undef;
       my $state = $2;
       $in_sync = 1;
       add_to_datahash $dh, $interface, $instance, $in_sync, 'state', $state;
       next;
     };
+    if ($in_vip_excluded) {
+      m/(.*?) dev (.*)/ && do {
+        $dh->{'instances'}->{$interface}->{$instance}->{vips_excluded} = 
+        [ $dh->{'instances'}->{$interface}->{$instance}->{vips_excluded} ? 
+          @{$dh->{'instances'}->{$interface}->{$instance}->{vips_excluded}} : (),
+          trim $1 ];
+      };
+    }
     if ($in_vip){
       m/(.*?) dev (.*)/ && do {
         $dh->{'instances'}->{$interface}->{$instance}->{vips} = 
@@ -145,7 +155,11 @@ sub process_data {
     m/(.*?) = (.*)/ && do {
       $in_vip = undef;
       add_to_datahash $dh, $interface, $instance, $in_sync, $1, $2;
-      m/Virtual IP/ && do {$in_vip = 1};
+      if (m/Virtual IP Excluded/) {
+        $in_vip_excluded = 1; $in_vip = undef;
+      } elsif (m/Virtual IP/) {
+        $in_vip = 1 ; $in_vip_excluded = undef;
+      }
       next;
     };
   }
@@ -275,6 +289,12 @@ sub print_detail {
       printf "  VIP count:\t\t\t%s\n",
         $dh->{instances}->{$interface}->{$vrid}->{'virtual-ip'};
       foreach my $vip (@{$dh->{instances}->{$interface}->{$vrid}->{vips}}){
+         printf "    %s\n", $vip;
+      }
+      printf "\n";
+      printf "  VIP count (excluded):\t\t%s\n",
+        $dh->{instances}->{$interface}->{$vrid}->{'virtual-ip-excluded'};
+      foreach my $vip (@{$dh->{instances}->{$interface}->{$vrid}->{vips_excluded}}){
          printf "    %s\n", $vip;
       }
       printf "\n";

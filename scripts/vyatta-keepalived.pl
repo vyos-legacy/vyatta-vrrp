@@ -145,10 +145,12 @@ sub keepalived_get_values {
       next;
     }
 
+    my @vips_excluded = $config->returnValues("virtual-address-excluded");
+
     my $use_vmac = 0;
     my $transition_intf = $intf;
     if ( $config->exists("rfc3768-compatibility") ) {
-	$use_vmac = 1;
+        $use_vmac = 1;
         $transition_intf = "$intf"."v"."$group";
     }
 
@@ -326,9 +328,9 @@ sub keepalived_get_values {
     $output .= "\tinterface $intf\n";
     $output .= "\tvirtual_router_id $group\n";
     if ($use_vmac) {
-	$output .= "\tuse_vmac $intf";
-	$output .= "v";
-	$output .= "$group\n";
+      $output .= "\tuse_vmac $intf";
+      $output .= "v";
+      $output .= "$group\n";
     }
     $output .= "\tpriority $priority\n";
     if ( $preempt eq "false" ) {
@@ -358,6 +360,13 @@ sub keepalived_get_values {
       $output .= "\t\t$vip\n";
     }
     $output .= "\t\}\n";
+    if ( defined @vips_excluded ) {
+      $output .= "\tvirtual_ipaddress_excluded \{\n";
+      foreach my $vip (@vips_excluded) {
+        $output .= "\t\t$vip\n";
+      }
+      $output .= "\t\}\n";
+    }
     if ($run_master_script ne 'null') {
       $output .= "\tnotify_master \"$state_transition_script master ";
       $output .= "$intf $group $transition_intf \'$run_master_script\' @vips\" \n";
